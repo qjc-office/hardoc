@@ -1,0 +1,4 @@
+interface:
+  display_name: "HarDoc"
+  short_description: "스킬·MCP 하네스 정리 후보와 doctor 진단·정확도 회귀평가"
+  default_prompt: "$skill-governor audit ."

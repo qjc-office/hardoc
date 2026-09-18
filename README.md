@@ -6,33 +6,21 @@
 
 ## Read HarDoc in your language
 
-**Maintained translation:** [한국어 README](README.ko.md)
-
-For any language supported by Google Translate, use the website translation link:
-
-1. Open [Google Translate website translation](https://translate.google.com/).
-2. Choose **Websites** and paste `https://github.com/qjc-office/hardoc`.
-3. Select your language. The links below are shortcuts for commonly used languages.
-
-<details>
-<summary>Common language shortcuts</summary>
+Each link below opens a maintained README page in that language. The commands and skill names stay in their original form so they can be copied safely.
 
 |  |  |  |
 | --- | --- | --- |
-| [العربية](https://translate.google.com/translate?sl=auto&tl=ar&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [বাংলা](https://translate.google.com/translate?sl=auto&tl=bn&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [简体中文](https://translate.google.com/translate?sl=auto&tl=zh-CN&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [繁體中文](https://translate.google.com/translate?sl=auto&tl=zh-TW&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Nederlands](https://translate.google.com/translate?sl=auto&tl=nl&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Français](https://translate.google.com/translate?sl=auto&tl=fr&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [Deutsch](https://translate.google.com/translate?sl=auto&tl=de&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Ελληνικά](https://translate.google.com/translate?sl=auto&tl=el&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [हिन्दी](https://translate.google.com/translate?sl=auto&tl=hi&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [Bahasa Indonesia](https://translate.google.com/translate?sl=auto&tl=id&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Italiano](https://translate.google.com/translate?sl=auto&tl=it&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [日本語](https://translate.google.com/translate?sl=auto&tl=ja&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [한국어](https://translate.google.com/translate?sl=auto&tl=ko&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Bahasa Melayu](https://translate.google.com/translate?sl=auto&tl=ms&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [فارسی](https://translate.google.com/translate?sl=auto&tl=fa&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [Polski](https://translate.google.com/translate?sl=auto&tl=pl&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Português](https://translate.google.com/translate?sl=auto&tl=pt&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Română](https://translate.google.com/translate?sl=auto&tl=ro&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [Русский](https://translate.google.com/translate?sl=auto&tl=ru&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Español](https://translate.google.com/translate?sl=auto&tl=es&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Svenska](https://translate.google.com/translate?sl=auto&tl=sv&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [ไทย](https://translate.google.com/translate?sl=auto&tl=th&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Türkçe](https://translate.google.com/translate?sl=auto&tl=tr&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Українська](https://translate.google.com/translate?sl=auto&tl=uk&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [Tiếng Việt](https://translate.google.com/translate?sl=auto&tl=vi&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Kiswahili](https://translate.google.com/translate?sl=auto&tl=sw&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [اردو](https://translate.google.com/translate?sl=auto&tl=ur&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
+| [العربية](README.ar.md) | [বাংলা](README.bn.md) | [简体中文](README.zh-CN.md) |
+| [繁體中文](README.zh-TW.md) | [Nederlands](README.nl.md) | [Français](README.fr.md) |
+| [Deutsch](README.de.md) | [Ελληνικά](README.el.md) | [हिन्दी](README.hi.md) |
+| [Bahasa Indonesia](README.id.md) | [Italiano](README.it.md) | [日本語](README.ja.md) |
+| [한국어](README.ko.md) | [Bahasa Melayu](README.ms.md) | [فارسی](README.fa.md) |
+| [Polski](README.pl.md) | [Português](README.pt.md) | [Română](README.ro.md) |
+| [Русский](README.ru.md) | [Español](README.es.md) | [Svenska](README.sv.md) |
+| [ไทย](README.th.md) | [Türkçe](README.tr.md) | [Українська](README.uk.md) |
+| [Tiếng Việt](README.vi.md) | [Kiswahili](README.sw.md) | [اردو](README.ur.md) |
 
-</details>
-
-Machine translation covers the explanatory text. Keep commands, file paths, skill names, and status values exactly as written, then verify them against the English README before running anything. To add a reviewed translation to the repository, copy `README.md` to `README.<locale>.md`, translate the prose, preserve all fenced commands, and add the link here.
-
+If your language is not listed, use [Google Translate website translation](https://translate.google.com/) and paste `https://github.com/qjc-office/hardoc`. To contribute a reviewed page, copy `README.md` to `README.<locale>.md`, translate the prose, preserve every fenced command, and add the link here.
 
 HarDoc is a read-only harness checkup for **Claude Code and Codex**. It helps you find the instructions and tools that make an AI assistant choose the wrong skill, see the same tool twice, or spend time loading things it does not need.
 

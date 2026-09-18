@@ -6,33 +6,21 @@
 
 ## 원하는 언어로 읽기
 
-**관리되는 번역본:** [한국어 README](README.ko.md) · [English README](README.md)
-
-Google Translate가 지원하는 언어라면 웹페이지 전체를 바로 번역할 수 있습니다.
-
-1. [Google Translate 웹사이트 번역](https://translate.google.com/)을 엽니다.
-2. **웹사이트(Websites)**를 선택하고 `https://github.com/qjc-office/hardoc`를 붙여 넣습니다.
-3. 원하는 언어를 선택합니다. 아래는 자주 사용하는 언어의 바로가기입니다.
-
-<details>
-<summary>Common language shortcuts</summary>
+아래 링크를 누르면 해당 언어로 작성된 README 페이지가 열립니다. 명령어와 스킬 이름은 복사해 실행할 수 있도록 원문 그대로 유지했습니다.
 
 |  |  |  |
 | --- | --- | --- |
-| [العربية](https://translate.google.com/translate?sl=auto&tl=ar&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [বাংলা](https://translate.google.com/translate?sl=auto&tl=bn&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [简体中文](https://translate.google.com/translate?sl=auto&tl=zh-CN&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [繁體中文](https://translate.google.com/translate?sl=auto&tl=zh-TW&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Nederlands](https://translate.google.com/translate?sl=auto&tl=nl&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Français](https://translate.google.com/translate?sl=auto&tl=fr&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [Deutsch](https://translate.google.com/translate?sl=auto&tl=de&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Ελληνικά](https://translate.google.com/translate?sl=auto&tl=el&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [हिन्दी](https://translate.google.com/translate?sl=auto&tl=hi&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [Bahasa Indonesia](https://translate.google.com/translate?sl=auto&tl=id&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Italiano](https://translate.google.com/translate?sl=auto&tl=it&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [日本語](https://translate.google.com/translate?sl=auto&tl=ja&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [한국어](https://translate.google.com/translate?sl=auto&tl=ko&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Bahasa Melayu](https://translate.google.com/translate?sl=auto&tl=ms&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [فارسی](https://translate.google.com/translate?sl=auto&tl=fa&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [Polski](https://translate.google.com/translate?sl=auto&tl=pl&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Português](https://translate.google.com/translate?sl=auto&tl=pt&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Română](https://translate.google.com/translate?sl=auto&tl=ro&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [Русский](https://translate.google.com/translate?sl=auto&tl=ru&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Español](https://translate.google.com/translate?sl=auto&tl=es&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Svenska](https://translate.google.com/translate?sl=auto&tl=sv&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [ไทย](https://translate.google.com/translate?sl=auto&tl=th&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Türkçe](https://translate.google.com/translate?sl=auto&tl=tr&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Українська](https://translate.google.com/translate?sl=auto&tl=uk&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
-| [Tiếng Việt](https://translate.google.com/translate?sl=auto&tl=vi&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [Kiswahili](https://translate.google.com/translate?sl=auto&tl=sw&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) | [اردو](https://translate.google.com/translate?sl=auto&tl=ur&u=https%3A%2F%2Fgithub.com%2Fqjc-office%2Fhardoc) |
+| [العربية](README.ar.md) | [বাংলা](README.bn.md) | [简体中文](README.zh-CN.md) |
+| [繁體中文](README.zh-TW.md) | [Nederlands](README.nl.md) | [Français](README.fr.md) |
+| [Deutsch](README.de.md) | [Ελληνικά](README.el.md) | [हिन्दी](README.hi.md) |
+| [Bahasa Indonesia](README.id.md) | [Italiano](README.it.md) | [日本語](README.ja.md) |
+| [한국어](README.ko.md) | [Bahasa Melayu](README.ms.md) | [فارسی](README.fa.md) |
+| [Polski](README.pl.md) | [Português](README.pt.md) | [Română](README.ro.md) |
+| [Русский](README.ru.md) | [Español](README.es.md) | [Svenska](README.sv.md) |
+| [ไทย](README.th.md) | [Türkçe](README.tr.md) | [Українська](README.uk.md) |
+| [Tiếng Việt](README.vi.md) | [Kiswahili](README.sw.md) | [اردو](README.ur.md) |
 
-</details>
-
-자동 번역 대상은 설명 문장입니다. 명령어, 파일 경로, 스킬 이름, 상태값은 그대로 유지하고 실행하기 전에 English README와 대조하세요. 검토가 끝난 번역을 저장소에 추가하려면 `README.md`를 `README.<locale>.md`로 복사해 문장만 번역하고, 모든 코드 블록은 보존한 뒤 이 목록에 링크를 추가하세요.
-
+목록에 없는 언어는 [Google Translate 웹사이트 번역](https://translate.google.com/)에서 `https://github.com/qjc-office/hardoc`를 붙여 넣어 읽을 수 있습니다. 검토된 번역을 추가하려면 `README.md`를 `README.<locale>.md`로 복사해 문장만 번역하고, 모든 코드 블록을 보존한 뒤 이 목록에 링크를 추가하세요.
 
 HarDoc은 **Claude Code와 Codex**의 하네스를 읽기 전용으로 점검하는 플러그인입니다. AI가 엉뚱한 스킬을 고르거나, 같은 도구를 두 번 보거나, 매 요청마다 필요 없는 도구를 불러오는 원인을 찾아 근거와 최소 수정안을 보여줍니다.
 

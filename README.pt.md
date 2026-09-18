@@ -17,6 +17,18 @@ claude plugin marketplace add https://github.com/qjc-office/hardoc
 claude plugin install hardoc@hardoc-marketplace
 ```
 
+## Instalar localmente no Codex
+
+Para instalar a skill diretamente no Codex, clone o repositório e crie um link na sua pasta local de skills:
+
+```bash
+git clone https://github.com/qjc-office/hardoc.git
+cd hardoc
+CODEX_SKILLS_DIR="${CODEX_HOME:-$HOME/.codex}/skills"
+mkdir -p "$CODEX_SKILLS_DIR"
+ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
+```
+
 ## Usar no Claude Code
 
 Abra uma nova sessão do Claude Code e execute:

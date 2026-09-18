@@ -17,6 +17,18 @@ claude plugin marketplace add https://github.com/qjc-office/hardoc
 claude plugin install hardoc@hardoc-marketplace
 ```
 
+## 在 Codex 中本機安裝
+
+若要直接在 Codex 中安裝這個 skill，請複製儲存庫，並在本機 skills 資料夾建立連結：
+
+```bash
+git clone https://github.com/qjc-office/hardoc.git
+cd hardoc
+CODEX_SKILLS_DIR="${CODEX_HOME:-$HOME/.codex}/skills"
+mkdir -p "$CODEX_SKILLS_DIR"
+ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
+```
+
 ## 在 Claude Code 中使用
 
 開啟新的 Claude Code 工作階段，然後執行：

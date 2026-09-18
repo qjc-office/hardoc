@@ -17,6 +17,18 @@ claude plugin marketplace add https://github.com/qjc-office/hardoc
 claude plugin install hardoc@hardoc-marketplace
 ```
 
+## Sakinisha ndani ya Codex
+
+Ili kusakinisha skill moja kwa moja katika Codex, kloni hazina na uunde kiungo kwenye folda yako ya skills ya ndani:
+
+```bash
+git clone https://github.com/qjc-office/hardoc.git
+cd hardoc
+CODEX_SKILLS_DIR="${CODEX_HOME:-$HOME/.codex}/skills"
+mkdir -p "$CODEX_SKILLS_DIR"
+ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
+```
+
 ## Tumia katika Claude Code
 
 Fungua kikao kipya cha Claude Code kisha utekeleze:

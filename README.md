@@ -134,6 +134,8 @@ It asks up to four questions about the work you do on this machine, ranks everyt
 
 The default prescription is not deletion. Claude Code can list a skill by name while withholding its description, so the skill still works and still answers to its slash command while its standing cost drops. A wrong guess at that level costs you nothing. Deletion-level changes happen only when you ask for them.
 
+That per-skill setting only reaches skills loaded from a skills directory. A skill that came from a plugin ignores it, so for those the only lever is the plugin as a whole, and `trim` says so instead of writing a setting that would quietly do nothing. HarDoc is itself a plugin, so the same limit applies to its own two skills.
+
 Two things stay opt-in. Hooks and agents have no supported off switch, so turning one off means cutting an entry out of a settings file or moving a file, and `trim` will only do that with `--include-hooks`. Everything else uses a reversible flag.
 
 ```text

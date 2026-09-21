@@ -10,8 +10,11 @@ Verify every key against the installed runtime version before using it. Keys and
 | `~/.claude.json` | MCP servers at user scope, per-project MCP approvals |
 | `~/.codex/config.toml` | Codex skills, MCP servers, plugins, feature flags |
 | `~/.codex/hooks.json` | Codex hooks |
+| The agents directory | Agent definitions. Touched only under `--include-hooks`, and only by moving a file into `~/.claude/hardoc/snapshots/<timestamp>/disabled-agents/`, never by deleting it |
 
 Project-scoped equivalents (`.claude/settings.json`, `.mcp.json`) follow the same rules when the person asks for a project-level change.
+
+The runtime writes to these same settings files while it is running. Read each file immediately before writing it, merge into what is actually there, and write once. Never build an edit from a copy read minutes earlier, or a setting the person changed in between disappears. Where a CLI command exists for the change, prefer it over editing the file, because it handles this and keeps derived state consistent.
 
 ## Files this skill must not edit
 
@@ -26,7 +29,8 @@ Project-scoped equivalents (`.claude/settings.json`, `.mcp.json`) follow the sam
 
 | Target | Edit | Undo |
 | --- | --- | --- |
-| Skill (Claude Code) | `skillOverrides: { "<name>": "name-only" \| "user-invocable-only" \| "off" }` | Remove the key |
+| Skill from a skills directory (Claude Code) | `skillOverrides: { "<name>": "name-only" \| "user-invocable-only" \| "off" }` | Remove the key |
+| Skill provided by a plugin (Claude Code) | **No per-skill lever exists.** The override above is not consulted for these skills and does nothing. The only lever is disabling the whole plugin | Re-enable the plugin |
 | All bundled skills (Claude Code) | `disableBundledSkills: true`. Blunt: it removes every shipped skill and workflow at once. Offer it only when the person says they never use them | Remove the key |
 | Plugin (Claude Code) | `enabledPlugins: { "<plugin>@<marketplace>": false }`. Write `false`; do not delete the key | Set `true` |
 | Plugin (Claude Code, via CLI) | `claude plugin disable <plugin>` | `claude plugin enable <plugin>` |
@@ -43,7 +47,7 @@ Prefer the CLI when one exists. `plugin disable` and `mcp remove` keep derived s
 | Target | Why it is destructive | Requirement |
 | --- | --- | --- |
 | A single hook | No supported disable flag exists. Hook entries accept only their type, command, timeout and async fields. The entry has to be cut out of the settings file | Snapshot, plus `--include-hooks` |
-| A single agent | No supported disable flag exists in agent frontmatter or settings. The file has to be moved out of the agents directory | Snapshot, plus `--include-hooks` |
+| A single agent | No supported disable flag exists in agent frontmatter or settings. The file has to be moved out of the agents directory, into `disabled-agents/` inside that run's snapshot so undo is a move back | Snapshot, plus `--include-hooks` |
 
 Two notes on hooks. Commenting a hook command out is not a supported disable path and must not be proposed. And a global switch that disables every hook usually disables the status line with it, so it is not a substitute for turning off one noisy hook.
 

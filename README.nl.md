@@ -4,7 +4,7 @@
 
 > HarDoc! Your harness is dumb right now. Fix it now!
 
-HarDoc is een controle voor Claude Code- en Codex-harnassen die alleen leest. Het vindt dubbele of tegenstrijdige instructies waardoor de assistent de verkeerde skill kiest.
+HarDoc controleert je Claude Code- en Codex-harness. Het rapporteert eerst en wijzigt instellingen pas nadat jij akkoord gaat.
 
 [English](README.md) · [한국어](README.ko.md) · [All language pages](README.md#read-hardoc-in-your-language)
 
@@ -27,6 +27,7 @@ cd hardoc
 CODEX_SKILLS_DIR="${CODEX_HOME:-$HOME/.codex}/skills"
 mkdir -p "$CODEX_SKILLS_DIR"
 ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
+ln -sfn "$PWD/plugin/skills/trim" "$CODEX_SKILLS_DIR/trim"
 ```
 
 ## Gebruiken in Claude Code
@@ -35,6 +36,12 @@ Open een nieuwe Claude Code-sessie en voer uit:
 
 ```text
 /skill-governor audit .
+```
+
+Om op het rapport te handelen, bekijk je eerst een voorbeeld van de opschoning:
+
+```text
+/trim --dry-run
 ```
 
 ## Gebruiken met Codex
@@ -55,6 +62,6 @@ HarDoc controleert eerst de projectmap, controleert daarna de CLI-versie en prob
 
 ## Veiligheidsgrenzen
 
-HarDoc werkt alleen-lezen. Het verwijdert, schakelt uit, installeert of wijzigt geen harness-configuratie en repareert doctor-resultaten niet automatisch. Beoordeel voorstellen eerst.
+HarDoc verandert niets zonder jouw akkoord. De skill `skill-governor` is alleen-lezen. `trim` past een wijziging pas toe nadat je een voorbeeld hebt goedgekeurd, maakt eerst een snapshot en toont één commando om het ongedaan te maken.
 
 Bekijk de [English README](README.md) voor de volledige uitleg en evaluatiestappen.

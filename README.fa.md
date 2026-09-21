@@ -4,7 +4,7 @@
 
 > HarDoc! Your harness is dumb right now. Fix it now!
 
-HarDoc یک بررسی فقط‌خواندنی برای هارنس Claude Code و Codex است. دستورهای تکراری یا متناقضی را پیدا می‌کند که باعث انتخاب skill اشتباه می‌شوند.
+HarDoc هارنس Claude Code و Codex شما را بررسی می‌کند. نخست گزارش می‌دهد و تنظیمات را تنها پس از تأیید شما تغییر می‌دهد.
 
 [English](README.md) · [한국어](README.ko.md) · [All language pages](README.md#read-hardoc-in-your-language)
 
@@ -27,6 +27,7 @@ cd hardoc
 CODEX_SKILLS_DIR="${CODEX_HOME:-$HOME/.codex}/skills"
 mkdir -p "$CODEX_SKILLS_DIR"
 ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
+ln -sfn "$PWD/plugin/skills/trim" "$CODEX_SKILLS_DIR/trim"
 ```
 
 ## استفاده در Claude Code
@@ -35,6 +36,12 @@ ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
 
 ```text
 /skill-governor audit .
+```
+
+برای اقدام بر اساس گزارش، پیش‌نمایش پاک‌سازی را ببینید:
+
+```text
+/trim --dry-run
 ```
 
 ## استفاده با Codex
@@ -55,6 +62,6 @@ HarDoc ابتدا پوشه پروژه را بررسی می‌کند، سپس ن�
 
 ## مرزهای امنیتی
 
-HarDoc فقط‌خواندنی است. تنظیمات هارنس را حذف، غیرفعال، نصب یا ویرایش نمی‌کند و نتیجه doctor را خودکار اصلاح نمی‌کند. پیش از تغییر، پیشنهادها را بررسی کنید.
+HarDoc بدون تأیید شما چیزی را تغییر نمی‌دهد. مهارت `skill-governor` فقط خواندنی است. مهارت `trim` تنها پس از تأیید پیش‌نمایش تغییر را اعمال می‌کند، ابتدا نسخهٔ پشتیبان می‌گیرد و یک فرمان برای بازگرداندن چاپ می‌کند.
 
 برای راهنمای کامل و ارزیابی، [README انگلیسی](README.md) را ببینید.

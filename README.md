@@ -49,7 +49,11 @@ Run it when:
 
 ## Safety promise
 
-HarDoc reports first. It does **not** delete, disable, install, edit harness configuration, auto-fix doctor findings, or send messages. A finding such as “cleanup candidate” is a proposal for a person to review, not an automatic change.
+HarDoc changes nothing without your approval.
+
+`skill-governor` is read-only. It reports; it does not delete, disable, install, edit configuration, auto-fix doctor findings, or send messages. A finding such as “cleanup candidate” is a proposal for a person to review.
+
+`trim` can change settings, and only after you approve a change set it showed you first. Before it writes anything it snapshots every file it will touch, and afterwards it prints one command that puts everything back. It never installs anything, never edits your project source, and leaves hooks and agents alone unless you ask for them by name.
 
 ## Install for Claude Code
 
@@ -66,17 +70,17 @@ Start a new Claude Code session and run:
 /skill-governor audit .
 ```
 
-The command name stays `skill-governor` for compatibility. The plugin is branded **HarDoc**.
+HarDoc ships two skills. `skill-governor` diagnoses and stops there. `trim` turns a diagnosis into a change you approved, and keeps a way back. The command name stays `skill-governor` for compatibility with earlier installations.
 
 ## Use with Codex
 
-Codex can use the same `skill-governor` skill. If your Codex setup already exposes the skill, run:
+Codex can use the same skills. If your Codex setup already exposes them, run:
 
 ```text
 $skill-governor audit .
 ```
 
-For a local installation, clone this repository and place or link `plugin/skills/skill-governor` in the skills directory used by your Codex installation:
+For a local installation, clone this repository and place or link both skill directories in the skills directory used by your Codex installation:
 
 ```bash
 git clone https://github.com/qjc-office/hardoc.git
@@ -84,6 +88,7 @@ cd hardoc
 CODEX_SKILLS_DIR="${CODEX_HOME:-$HOME/.codex}/skills"
 mkdir -p "$CODEX_SKILLS_DIR"
 ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
+ln -sfn "$PWD/plugin/skills/trim" "$CODEX_SKILLS_DIR/trim"
 ```
 
 Then start a new Codex session and run `$skill-governor audit .`. The skill checks the installed Codex version and uses the native `codex doctor` surface when it is available.
@@ -117,6 +122,30 @@ HarDoc does not treat a successful doctor run as proof that every task will be a
 
 The evaluation uses the same host, model, permissions, and task prompts for both variants. It records wrong selections, missed required skills, instruction conflicts, and task outcomes separately. Token count or latency alone is not an accuracy result.
 
+## Cleaning up with `trim`
+
+`skill-governor` stops at a proposal. `trim` is the skill that carries one out.
+
+```text
+/trim --dry-run
+```
+
+It asks up to four questions about the work you do on this machine, ranks everything that loads on every session against those answers, and shows you a table before writing anything. Approve what you want, and it applies only that.
+
+The default prescription is not deletion. Claude Code can list a skill by name while withholding its description, so the skill still works and still answers to its slash command while its standing cost drops. A wrong guess at that level costs you nothing. Deletion-level changes happen only when you ask for them.
+
+That per-skill setting only reaches skills loaded from a skills directory. A skill that came from a plugin ignores it, so for those the only lever is the plugin as a whole, and `trim` says so instead of writing a setting that would quietly do nothing. HarDoc is itself a plugin, so the same limit applies to its own two skills.
+
+Two things stay opt-in. Hooks and agents have no supported off switch, so turning one off means cutting an entry out of a settings file or moving a file, and `trim` will only do that with `--include-hooks`. Everything else uses a reversible flag.
+
+```text
+/trim restore 20260922-101500
+```
+
+Rollback compares each value against the snapshot. If you edited something yourself after the snapshot was taken, `trim` reports the conflict instead of overwriting your work.
+
+A smaller context is not automatically a better one. When you want to know whether accuracy actually improved, go back to `skill-governor evaluate`, which compares real tasks.
+
 ## How to read the report
 
 - **Keep**: evidence says the component is still needed.
@@ -140,6 +169,7 @@ If a path is missing or is a file instead of a directory, HarDoc reports an erro
 5. Read the doctor status first.
 6. Review cleanup candidates and their evidence.
 7. Only then create a proposal and evaluate it against real work.
+8. When you want to act on it, run `/trim --dry-run` and read the table before approving anything.
 
 Do not delete an item only because its observed call count is zero. It may be required rarely, available only on another machine, or loaded directly by a project file.
 
@@ -147,7 +177,9 @@ Do not delete an item only because its observed call count is zero. It may be re
 
 - The plugin machine name is `hardoc`.
 - The marketplace name is `hardoc-marketplace`.
+- The plugin ships two skills: `skill-governor` (diagnose) and `trim` (apply, with approval).
 - The command slug is `skill-governor` for compatibility with earlier installations.
+- `trim` reads the settings schema of the runtime that is actually executing. If an older CLI shim sits earlier on your `PATH`, it may not know keys your running build supports.
 - Claude Code and Codex are checked independently. A result from one runtime is not copied to the other.
 - If a CLI version does not support a doctor command or output option, HarDoc records that fact instead of guessing.
 

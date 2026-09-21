@@ -4,7 +4,7 @@
 
 > HarDoc! Your harness is dumb right now. Fix it now!
 
-HarDoc ialah pemeriksaan baca sahaja untuk harness Claude Code dan Codex. Ia mencari arahan pendua atau bercanggah yang menyebabkan pembantu memilih skill yang salah.
+HarDoc memeriksa harness Claude Code dan Codex anda. Ia melapor dahulu, dan hanya mengubah tetapan selepas anda meluluskannya.
 
 [English](README.md) · [한국어](README.ko.md) · [All language pages](README.md#read-hardoc-in-your-language)
 
@@ -27,6 +27,7 @@ cd hardoc
 CODEX_SKILLS_DIR="${CODEX_HOME:-$HOME/.codex}/skills"
 mkdir -p "$CODEX_SKILLS_DIR"
 ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
+ln -sfn "$PWD/plugin/skills/trim" "$CODEX_SKILLS_DIR/trim"
 ```
 
 ## Guna dalam Claude Code
@@ -35,6 +36,12 @@ Buka sesi Claude Code baharu dan jalankan:
 
 ```text
 /skill-governor audit .
+```
+
+Untuk bertindak atas laporan itu, lihat pratonton pembersihan:
+
+```text
+/trim --dry-run
 ```
 
 ## Guna dengan Codex
@@ -55,6 +62,6 @@ HarDoc menyemak direktori projek, versi CLI, kemudian cuba menjalankan native do
 
 ## Had keselamatan
 
-HarDoc beroperasi secara baca sahaja. Ia tidak memadam, melumpuhkan, memasang atau mengubah konfigurasi harness dan tidak membaiki keputusan doctor secara automatik. Semak cadangan dahulu.
+HarDoc tidak mengubah apa-apa tanpa kelulusan anda. Skil `skill-governor` hanya membaca. Skil `trim` melaksanakan perubahan hanya selepas anda meluluskan pratonton, mengambil snapshot dahulu, dan mencetak satu arahan untuk mengembalikannya.
 
 Lihat [English README](README.md) untuk panduan dan penilaian lengkap.

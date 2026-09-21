@@ -4,7 +4,7 @@
 
 > HarDoc! Your harness is dumb right now. Fix it now!
 
-HarDoc أداة فحص للقراءة فقط لبيئة Claude Code وCodex. تكتشف الأدوات والتعليمات المتكررة أو المتعارضة التي تجعل المساعد يختار المهارة الخطأ.
+يفحص HarDoc بنية Claude Code و Codex. يعرض تقريرًا أولًا، ولا يغيّر أي إعداد إلا بعد موافقتك.
 
 [English](README.md) · [한국어](README.ko.md) · [All language pages](README.md#read-hardoc-in-your-language)
 
@@ -27,6 +27,7 @@ cd hardoc
 CODEX_SKILLS_DIR="${CODEX_HOME:-$HOME/.codex}/skills"
 mkdir -p "$CODEX_SKILLS_DIR"
 ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
+ln -sfn "$PWD/plugin/skills/trim" "$CODEX_SKILLS_DIR/trim"
 ```
 
 ## التشغيل في Claude Code
@@ -35,6 +36,12 @@ ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
 
 ```text
 /skill-governor audit .
+```
+
+للتصرّف بناءً على التقرير، اعرض معاينة للتنظيف:
+
+```text
+/trim --dry-run
 ```
 
 ## التشغيل في Codex
@@ -55,6 +62,6 @@ $skill-governor audit .
 
 ## حدود الأمان
 
-HarDoc للقراءة فقط. لا يحذف أو يعطّل أو يثبت أو يعدّل إعدادات البيئة ولا يصلح نتائج doctor تلقائياً. راجع الاقتراحات قبل أي تغيير.
+لا يغيّر HarDoc شيئًا دون موافقتك. مهارة `skill-governor` للقراءة فقط. أما `trim` فتطبّق التغيير بعد موافقتك على معاينة فقط، وتأخذ نسخة احتياطية أولًا، ثم تطبع أمرًا واحدًا للتراجع.
 
 للتفاصيل الكاملة وشرح التقييم، راجع [README الإنجليزي](README.md).

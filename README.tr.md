@@ -4,7 +4,7 @@
 
 > HarDoc! Your harness is dumb right now. Fix it now!
 
-HarDoc, Claude Code ve Codex harness’lerini salt okunur olarak denetler. Asistanın yanlış skill seçmesine neden olan yinelenen veya çelişkili talimatları bulur.
+HarDoc, Claude Code ve Codex koşumunuzu denetler. Önce rapor verir ve ayarları ancak siz onayladıktan sonra değiştirir.
 
 [English](README.md) · [한국어](README.ko.md) · [All language pages](README.md#read-hardoc-in-your-language)
 
@@ -27,6 +27,7 @@ cd hardoc
 CODEX_SKILLS_DIR="${CODEX_HOME:-$HOME/.codex}/skills"
 mkdir -p "$CODEX_SKILLS_DIR"
 ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
+ln -sfn "$PWD/plugin/skills/trim" "$CODEX_SKILLS_DIR/trim"
 ```
 
 ## Claude Code ile kullanma
@@ -35,6 +36,12 @@ Yeni bir Claude Code oturumu açıp çalıştırın:
 
 ```text
 /skill-governor audit .
+```
+
+Rapora göre harekete geçmek için temizliğin önizlemesine bakın:
+
+```text
+/trim --dry-run
 ```
 
 ## Codex ile kullanma
@@ -55,6 +62,6 @@ HarDoc önce proje dizinini, sonra CLI sürümünü kontrol eder ve her runtime�
 
 ## Güvenlik sınırları
 
-HarDoc salt okunurdur. Harness ayarlarını silmez, devre dışı bırakmaz, kurmaz veya değiştirmez; doctor sonuçlarını da otomatik düzeltmez. Değişiklikten önce önerileri inceleyin.
+HarDoc sizin onayınız olmadan hiçbir şeyi değiştirmez. `skill-governor` becerisi yalnızca okur. `trim` becerisi, bir önizlemeyi onayladıktan sonra değişikliği uygular; önce anlık görüntü alır ve geri almak için tek bir komut yazdırır.
 
 Tam kılavuz ve değerlendirme için [English README](README.md) sayfasına bakın.

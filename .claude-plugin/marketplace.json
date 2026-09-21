@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "hardoc-marketplace",
   "version": "1.0.0",
-  "description": "HarDoc: Claude Code·Codex 하네스 정확도 진단·정리 후보·회귀평가 플러그인",
+  "description": "HarDoc: diagnose a Claude Code or Codex harness, then clean it up with approval and a rollback.",
   "owner": {
     "name": "QuantumJumpClub",
     "url": "https://github.com/qjc-office"
@@ -10,8 +10,8 @@
   "plugins": [
     {
       "name": "hardoc",
-      "description": "중복·충돌·불필요 노출을 읽기 전용으로 진단하고 claude doctor·codex doctor와 실제 업무 회귀평가를 연결합니다.",
-      "version": "0.1.0",
+      "description": "Read-only diagnosis of duplicated, conflicting or needlessly exposed harness items, wired to claude doctor and codex doctor and to a real-task regression check; plus an approval-gated cleanup with one-command rollback.",
+      "version": "0.2.0",
       "source": "./plugin",
       "category": "productivity",
       "homepage": "https://github.com/qjc-office/hardoc",
@@ -22,7 +22,9 @@
         "skills",
         "mcp",
         "doctor",
-        "evaluation"
+        "evaluation",
+        "cleanup",
+        "context"
       ]
     }
   ]

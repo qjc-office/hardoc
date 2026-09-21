@@ -4,7 +4,7 @@
 
 > HarDoc! Your harness is dumb right now. Fix it now!
 
-HarDoc granskar Claude Code- och Codex-harnessen i skrivskyddat läge. Det hittar dubbla eller motstridiga instruktioner som kan få assistenten att välja fel skill.
+HarDoc granskar din Claude Code- och Codex-harness. Den rapporterar först och ändrar inställningar först efter ditt godkännande.
 
 [English](README.md) · [한국어](README.ko.md) · [All language pages](README.md#read-hardoc-in-your-language)
 
@@ -27,6 +27,7 @@ cd hardoc
 CODEX_SKILLS_DIR="${CODEX_HOME:-$HOME/.codex}/skills"
 mkdir -p "$CODEX_SKILLS_DIR"
 ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
+ln -sfn "$PWD/plugin/skills/trim" "$CODEX_SKILLS_DIR/trim"
 ```
 
 ## Använd i Claude Code
@@ -35,6 +36,12 @@ ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
 
 ```text
 /skill-governor audit .
+```
+
+För att agera på rapporten, se en förhandsvisning av rensningen:
+
+```text
+/trim --dry-run
 ```
 
 ## Använd med Codex
@@ -55,6 +62,6 @@ HarDoc kontrollerar först projektmappen, sedan CLI-versionen och försöker kö
 
 ## Säkerhetsgränser
 
-HarDoc är skrivskyddat. Det tar inte bort, inaktiverar, installerar eller ändrar harness-konfiguration och rättar inte doctor-resultat automatiskt. Granska förslag innan du ändrar något.
+HarDoc ändrar ingenting utan ditt godkännande. Färdigheten `skill-governor` är skrivskyddad. `trim` tillämpar en ändring först när du godkänt en förhandsvisning, tar först en ögonblicksbild och skriver ut ett enda kommando för att ångra.
 
 Se [English README](README.md) för fullständig guide och utvärdering.

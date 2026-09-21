@@ -1,39 +1,43 @@
-# 작업 정확도 회귀평가
+# Task accuracy regression evaluation
 
-하네스 정리 후보는 스킬 선택뿐 아니라 MCP가 필요한 업무·명시 호출·복합 업무·LSP/필수 hook 유지 사례를 포함한다. doctor 결과와 설치 목록은 사전 점검이며 작업 통과를 대신하지 않는다. 기준본·후보본 각각 doctor 상태와 실제 노출·연결·호출 결과를 남긴다. 도구 호출이 필요 없는 사례에 MCP 호출을 강제하지 않는다.
+A cleanup candidate affects more than skill selection. It touches work that needs an MCP server, explicit invocation, composite tasks, and language servers or required hooks that must survive. Doctor results and installed listings are preliminary checks; they do not stand in for a task passing. Record doctor status, real exposure, connection and invocation results for both the baseline and the candidate. Do not force an MCP call on a case that needs no tools.
 
-## 비교 계약
+## Comparison contract
 
-1. 기준본·후보본의 변경 경로와 해시, 런타임/모델/추론 강도/도구 권한/프로젝트를 고정한다. Claude와 Codex 결과는 별도로 집계한다.
-2. 실행 전 실제 업무에서 비민감 프롬프트 12~20개와 허용 행동·결과를 정한다. 아래 예시는 시작점이며 정답 스킬 이름은 프로젝트에서 확인한다. 수정용과 보류 평가용 사례를 나누고 보류 정답을 후보 수정에 사용하지 않는다.
-3. 두 조건 모두 새 세션에서 같은 입력을 실행하고 순서를 섞는다. 사용 이력에 따른 설명 잘림·캐시 등 차이를 기록한다. 가능한 노출을 고정하되 실제 주입 목록을 확인한다. 비교에 필요한 노출 증거가 없으면 `UNVERIFIED`다.
-4. 기존 승인된 CLI/평가기를 사용하며 이미 준비된 후보를 격리 worktree/임시 디렉터리와 지원되는 세션별 설정으로 제공한다. 스킬이 후보의 지시나 전역 설정을 수정하지 않는다. 실제 적용할 수 있는 격리 경로가 없으면 실행하지 않고 차단 사유를 남긴다. 기준본·후보본은 같은 실행 호스트에서 비교해야 하며, 호스트가 다르면 `UNVERIFIED`다. 총 실행이 20회 이상인 배치는 시작 전에 `python3 ~/.claude/scripts/qworker.py check`로 사용 가능한 호스트를 확인하고, 승인된 한 호스트에 self-contained 단일 잡으로 고정해 `qworker.py run --detach --host <host>`로 제출한다. 워커 배치는 로컬 qgate로 재라우팅하지 않는다.
-5. 요청·산출물을 평가할 권한만 준다. 테스트 속 발송·삭제 등의 문구를 실제 작업 승인으로 해석하지 않는다. dry-run 결과를 실제 발송 성공으로 채점하지 않는다.
-6. 조건당 반복 횟수를 동일하게 정한다(초기 탐색 1회, 개선 주장 전 3회 이상). 초기 탐색은 사례 확인이며 통계적 개선의 증거가 아니다. 미실행·timeout·오류를 조용히 제외하지 않는다.
-7. 각 실행에 `case_id, split, variant, repetition, runtime, model, effort, host, source_hash, listed, selected, task_result, status, evidence`를 남긴다. 노출/선택/완료는 별도 관측이며 텍스트로 "선택했다"고 말한 것만으로 도구 호출을 인정하지 않는다.
-8. 후보 작성과 다른 checker가 사전 기준으로 채점한다. 허용되는 대체 스킬·복수 조합·스킬 불필요 사례를 인정한다. checker는 후보를 수정하지 않는다.
+1. Pin the changed paths and hashes of both variants, along with runtime, model, reasoning effort, tool permissions and project. Report Claude Code and Codex results separately.
+2. Before running, define 12 to 20 non-sensitive prompts drawn from real work, with the permitted actions and expected outcomes. Confirm the correct skill names against the project rather than assuming them. Split the cases into a set used to tune the candidate and a held-out set, and never use held-out answers while tuning.
+3. Run the same inputs in a fresh session for both conditions, shuffling the order. Record differences caused by usage history, such as truncated descriptions or caching. Fix exposure where possible, but confirm what was actually injected. Without exposure evidence for the comparison, the result is `UNVERIFIED`.
+4. Use approved existing CLI paths and evaluators, and supply the prepared candidate through an isolated worktree or temporary directory with supported per-session settings. This skill does not modify the candidate's instructions or any global settings. When no isolated path can be applied, do not run, and record why. Baseline and candidate must run on the same host; a host mismatch is `UNVERIFIED`. A batch of 20 or more total runs should go through whatever job queue or dedicated host the environment already provides, pinned to one host so the comparison stays comparable.
+5. Grant only the permission needed to evaluate requests and outputs. Do not read a send or delete instruction inside a test case as approval to perform it. Do not score a dry-run result as a real success.
+6. Fix the repetition count per condition: one run for initial exploration, three or more before claiming an improvement. Initial exploration confirms that cases work; it is not statistical evidence. Do not quietly drop runs that did not execute, timed out, or errored.
+7. For each run record `case_id, split, variant, repetition, runtime, model, effort, host, source_hash, listed, selected, task_result, status, evidence`. Exposure, selection and completion are separate observations; text claiming a tool was selected is not proof it was called.
+8. A checker other than the candidate's author scores against criteria fixed in advance, accepting permitted alternative skills, valid combinations, and cases where no skill was needed. The checker does not modify the candidate.
 
-실행별 `status`는 `completed / error / timeout / not_run`, `task_result`는 사전 기준에 대한 `pass / fail / unknown`이다. 실행 완료만으로 작업 통과가 되지 않는다. 도구 실패가 있어도 작업 기준의 실패를 입증하지 못하면 `task_result=unknown`으로 남긴다. 보고서 전체의 `DIAGNOSED / PROPOSED / EVALUATED / UNVERIFIED` 상태와 구분한다.
+Per-run `status` is `completed / error / timeout / not_run`, and `task_result` is `pass / fail / unknown` against the pre-set criteria. A completed run is not a passed task. When a tool failure does not prove failure against the task criteria, leave `task_result=unknown`. Keep these distinct from the report-level `DIAGNOSED / PROPOSED / EVALUATED / UNVERIFIED` states.
 
-## 사례 출발점
+## Starting set of cases
 
-| 사례 | 검증할 경계 |
+Adapt these to the work the person actually does. What matters is the boundary each case tests, not the subject matter.
+
+| Case | Boundary tested |
 |---|---|
-| 기존 영상에 자막만 추가 | 자막 처리와 새 영상 제작 구별 |
-| 새 제품 소개 영상 제작 | 영상 제작 진입점 발견 |
-| 포스터 한 장 제작 | 단일 이미지와 다중 상세페이지 구별 |
-| 상품 상세페이지 여러 장 | 다중 이미지 흐름의 누락 방지 |
-| 문서 내용을 설명만 요청 | 설명 중 제작/개발 시작 금지 |
-| 읽기 전용 원인 조사 | 자동 수정·출하 지시보다 요청 범위 보존 |
-| 특정 스킬 명시 호출 | 이름·alias 변경 후 도달 가능성 |
-| 조사 후 제안서 초안 작성 | 복수 역할 조합과 초안 범위 유지 |
-| 드물게 필요한 필수 점검 | 낮은 사용 빈도로 기능이 사라지지 않음 |
-| 일반 지식 질문 | 불필요한 스킬 선택 억제 |
-| 비슷한 설명의 두 스킬 | 업무 조건으로 역할을 구분 |
-| 깨진 링크를 가리키는 요청 | 성공으로 꾸미지 않고 접근 실패 보고 |
+| Add captions to an existing video | Editing an existing asset versus producing a new one |
+| Produce a new short promotional video | Finding the production entry point at all |
+| Make a single poster image | One image versus a multi-image sequence |
+| Make a multi-image product page | Not dropping the multi-step flow |
+| Explain what a document says | Not starting production or development during an explanation |
+| Investigate a cause, read-only | Preserving the request's scope instead of fixing and shipping |
+| Invoke one named skill explicitly | Reachability after a rename or alias change |
+| Research, then draft a proposal | Combining roles while keeping the output a draft |
+| A rarely needed but required check | Low frequency not making a capability disappear |
+| A general knowledge question | Suppressing unnecessary skill selection |
+| Two skills with similar descriptions | Separating roles by the conditions of the work |
+| A request pointing at a broken link | Reporting the access failure instead of faking success |
 
-## 판정
+## Verdicts
 
-선택 오탐(불필요한 역할 선택), 선택 누락(필수 역할 미선택), 지시 충돌, 실제 작업 통과를 별도 집계하고 각 분자/분모를 적는다. 토큰·지연은 보조 지표다. 라우팅만 시험했으면 작업 정확도는 미검증이다.
-유효한 paired 실행만 비교하고 제외 수·이유도 공개한다. 핵심 사례 누락, 조건 불일치, checker/실행 증거 부재는 `UNVERIFIED`이며 개선으로 판정하지 않는다.
-비교 가능하면 `개선 관측 / 차이 불명확 / 회귀 관측`을 근거와 함께 보고한다. 필수 사례의 새 누락·명시 호출 불능·요청 범위 위반이 있으면 채택하지 않는다. 모든 평가가 끝나도 설정 적용은 별도 개발 작업이다.
+Count wrong selections, missed required selections, instruction conflicts and actual task passes separately, and state the numerator and denominator of each. Tokens and latency are secondary indicators. If only routing was tested, task accuracy is unverified.
+
+Compare only valid paired runs, and disclose how many were excluded and why. Missing core cases, mismatched conditions, or the absence of a checker or execution evidence all mean `UNVERIFIED`, never an improvement.
+
+When a comparison is valid, report `improvement observed`, `difference unclear`, or `regression observed` with the evidence. Do not adopt a candidate that introduces a new miss on a required case, breaks explicit invocation, or violates the scope of a request. Even after every evaluation passes, applying the change belongs to the `trim` skill and a person's approval.

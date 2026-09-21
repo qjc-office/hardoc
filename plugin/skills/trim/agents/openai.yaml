@@ -1,0 +1,4 @@
+interface:
+  display_name: "HarDoc Trim"
+  short_description: "Turn a harness diagnosis into an approved change, with a one-command rollback"
+  default_prompt: "$trim --dry-run"

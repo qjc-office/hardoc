@@ -17,7 +17,7 @@ The goal is not a smaller item count. It is a harness where the assistant sees w
 | Flag | Effect |
 | --- | --- |
 | `--dry-run` | Preview only. Write nothing at all, including the stored profile. |
-| `--reprofile` | Ask the profile questions again and overwrite the stored answers. |
+| `--reprofile` | Ask the profile questions again and overwrite the stored answers. Combined with `--dry-run`, ask them but store nothing. |
 | `--include-hooks` | Allow hook and agent candidates, which require destructive edits. Off by default. |
 | `--level off` | Raise the default prescription from `name-only` to `off` for role-unrelated items. |
 | `restore <id>` | Roll a snapshot back. |
@@ -29,28 +29,32 @@ Claude Code's `skillOverrides` setting takes four values per skill name. Verify 
 | Value | Effect | Use for |
 | --- | --- | --- |
 | `on` (absent) | Name and description both exposed | Keep |
-| `name-only` | Name listed, description withheld | **Default prescription.** The skill still works; only its standing token cost drops |
+| `name-only` | Name listed, description withheld | **Default prescription for a skill from a skills directory.** The skill still works; only its standing token cost drops |
 | `user-invocable-only` | Hidden from the model, `/name` still works | Rarely needed, but should not be auto-selected |
 | `off` | Hidden from both | Confirmed unused |
 
 Start at `name-only`. A wrong guess there costs nothing: the capability survives and a person can still invoke it. Reserve `off` for items the person names, or for `--level off` runs.
 
-### This lever does not reach plugin-provided skills
+### In Claude Code, this lever does not reach plugin-provided skills
 
-A per-skill override applies to skills loaded from a skills directory. For a skill that came from a plugin the setting is not consulted at all: the skill stays fully listed no matter what the override says. Writing one for a plugin skill is a silent no-op, and reporting a saving from it is a false success.
+In Claude Code a per-skill override applies to skills loaded from a skills directory. For a skill that came from a plugin the setting is not consulted at all: the skill stays fully listed no matter what the override says. Writing one for a plugin skill is a silent no-op, and reporting a saving from it is a false success.
 
 So classify every candidate by source before prescribing anything.
 
-| Source | Available lever |
+| Source | Available lever in Claude Code |
 | --- | --- |
 | A skills directory (user, project, or a link into one) | The four levels above, per skill |
 | A plugin | Only the plugin as a whole, through `enabledPlugins`. There is no per-skill lever |
+| Bundled with the runtime | Only all of them at once, through `disableBundledSkills` |
+| Anything else, or a source that could not be resolved | No prescription. Report it as `unknown` and leave it alone |
 
 When a plugin's skills are the expensive part, the honest proposal is "disable this plugin" with its full cost, not a per-skill override that will do nothing. If the person wants to keep part of a plugin, say that the runtime does not support it.
 
 HarDoc ships as a plugin, so this limit covers `skill-governor` and `trim` themselves.
 
 Confirm the behavior against the installed version rather than assuming it, and treat "the override is ignored for plugin skills" as the default assumption until a version proves otherwise.
+
+**This particular limit is a Claude Code observation, and it does not transfer to Codex.** Codex keys its per-skill setting by path and can address a server nested inside a plugin, so a per-skill lever may well exist there for a skill a plugin provides. Whether it does is unverified. Check the installed Codex configuration before either prescribing such a change or refusing one, and say which of the two runtimes an observation came from.
 
 The same preference for reversible form applies elsewhere. Plugins are disabled by writing `false`, not by deleting the key. Rules can be demoted from always-loaded to path-scoped instead of being removed.
 
@@ -64,7 +68,7 @@ A profile is a hypothesis about what this person does, not a fact about what the
 
 ### 2. Inventory and cost
 
-Reuse the collection contract in the `skill-governor` skill (`references/harness-audit.md` §2). Do not write a second inventory implementation. For every item add three fields:
+Reuse the collection contract in the `skill-governor` skill (its `references/harness-audit.md`, §2). Do not write a second inventory implementation. For every item add four fields:
 
 - `source`: where the item is loaded from. This decides which lever exists at all, so resolve it before anything else and leave it `unknown` rather than guessing. An item whose source is unknown gets no prescription.
 - `always_cost`: what this item injects into every session regardless of the request. Skill description length, bytes of a rule file with no `paths:` frontmatter, exposed MCP tool schemas, registered hook count.
@@ -83,7 +87,7 @@ Write nothing in this step. A person must be able to run the preview on a whim.
 
 ### 4. Apply
 
-1. Snapshot first. Copy every file about to change into `~/.claude/hardoc/snapshots/<timestamp>/` and write `manifest.json` recording each item's previous value.
+1. Snapshot first. Copy every file about to change into `~/.claude/hardoc/snapshots/<timestamp>/` and write `manifest.json` recording each item's previous value. For a change that moves a file rather than editing one, record both paths, and keep the moved file outside the snapshot directory. A snapshot is a backup a person may delete once the change looks settled, and the only copy of their agent must not disappear with it.
 2. Apply the approved subset only. If the person approved part of the list, do not apply the rest.
 3. Re-parse every edited file. If a JSON or TOML file no longer parses, restore the snapshot immediately and report the failure.
 4. Confirm the change took effect by re-observing what the runtime exposes. A file that parses is not a change that applied. A lever the runtime ignores leaves a perfectly valid file behind, which is exactly what a silent no-op looks like, so a parse check cannot tell the two apart. Report anything that did not take effect as failed, and do not count its saving.

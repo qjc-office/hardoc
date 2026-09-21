@@ -47,7 +47,7 @@ For each candidate write `observation → affected requests → smallest change 
 
 Zero invocations is not grounds for removal. Check whether the item was exposed at all, used on another machine, read directly as a file, or needed rarely. Do not judge a language server by how often a skill was invoked.
 
-Target the source and its existing sync path, never a plugin cache or a generated file. Per-skill listing overrides do not reach plugin-provided skills, so for those the only lever is the plugin as a whole; `trim` carries the same rule in `references/levers.md`. Confirm the behavior of the installed version. Distinguish a runtime's disable mechanism from its limits on implicit invocation.
+Target the source and its existing sync path, never a plugin cache or a generated file. Per-skill listing overrides do not reach plugin-provided skills, so for those the only lever is the plugin as a whole; the `trim` skill carries the same rule in its own `references/levers.md`. Confirm the behavior of the installed version. Distinguish a runtime's disable mechanism from its limits on implicit invocation.
 
 Order by reproduced malfunction first, then removal of needless selection candidates, then clearer role and description boundaries. Bulk description truncation, a global item cap, and automatic deletion of anything unused are not defaults.
 

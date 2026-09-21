@@ -4,14 +4,14 @@ The profile ranks candidates. It never decides alone, and it never overrides obs
 
 ## Questions
 
-Ask these once and store the answers. Offer choices rather than open text wherever possible, and let the person skip any question.
+Ask these once and store the answers, unless the run is a `--dry-run`, which keeps them in memory and writes nothing. Offer choices rather than open text wherever possible, and let the person skip any question.
 
 1. **Main work on this machine.** Writing code, writing documents and content, data and analysis, design, operations and management. Multiple answers allowed.
 2. **Stack, if code was selected.** Languages and frameworks in daily use.
 3. **Not done here.** Work the person is confident they never do on this machine. This is the strongest signal in the set, because it is a statement rather than an inference.
 4. **Machine role.** Only machine, one of several, or a shared or temporary machine. A person who works across machines should see fewer aggressive proposals, because evidence collected here covers less of their work.
 
-Store the answers as `~/.claude/hardoc/profile.json` with the timestamp and the runtime version they were collected under. A profile older than six months should be confirmed rather than trusted silently.
+Store the answers as `~/.claude/hardoc/profile.json` with the timestamp and the runtime version they were collected under, except under `--dry-run`, which writes nothing and keeps the answers in memory for that run only. A profile older than six months should be confirmed rather than trusted silently.
 
 ## Matching rules
 

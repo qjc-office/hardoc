@@ -41,7 +41,7 @@ In Claude Code a per-skill override applies to skills loaded from a skills direc
 
 So classify every candidate by source before prescribing anything.
 
-| Source | Available lever in Claude Code |
+| Source | Available lever, or prescribing rule, in Claude Code |
 | --- | --- |
 | A skills directory (user, project, or a link into one) | The four levels above, per skill |
 | A plugin | Only the plugin as a whole, through `enabledPlugins`. There is no per-skill lever |
@@ -54,7 +54,9 @@ HarDoc ships as a plugin, so this limit covers `skill-governor` and `trim` thems
 
 Confirm the behavior against the installed version rather than assuming it, and treat "the override is ignored for plugin skills" as the default assumption until a version proves otherwise.
 
-**This particular limit is a Claude Code observation, and it does not transfer to Codex.** Codex keys its per-skill setting by path and can address a server nested inside a plugin, so a per-skill lever may well exist there for a skill a plugin provides. Whether it does is unverified. Check the installed Codex configuration before either prescribing such a change or refusing one, and say which of the two runtimes an observation came from.
+**This particular limit is a Claude Code observation, and it should not be carried over to Codex unchecked.** Codex keys its per-skill setting by path, and it can address an MCP server nested inside a plugin, which suggests its addressing model may differ here. Whether that extends to a plugin's skills is unverified, and the nested-server observation is not evidence that it does. Check the installed Codex configuration before either prescribing such a change or refusing one, and say which of the two runtimes an observation came from.
+
+Until that check is done on a Codex run, prescribe nothing there for a skill whose source you could not resolve. A skipped candidate costs a little standing context; a confidently wrong prescription costs trust in every other row of the table.
 
 The same preference for reversible form applies elsewhere. Plugins are disabled by writing `false`, not by deleting the key. Rules can be demoted from always-loaded to path-scoped instead of being removed.
 
@@ -87,7 +89,7 @@ Write nothing in this step. A person must be able to run the preview on a whim.
 
 ### 4. Apply
 
-1. Snapshot first. Copy every file about to change into `~/.claude/hardoc/snapshots/<timestamp>/` and write `manifest.json` recording each item's previous value. For a change that moves a file rather than editing one, record both paths, and keep the moved file outside the snapshot directory. A snapshot is a backup a person may delete once the change looks settled, and the only copy of their agent must not disappear with it.
+1. Snapshot first. Copy every file about to change into `~/.claude/hardoc/snapshots/<timestamp>/` and write `manifest.json` recording each item's previous value. For a change that moves a file rather than editing one, record both paths, and keep the moved file outside the snapshot directory, under `~/.claude/hardoc/disabled-agents/<timestamp>/<scope>/`. A snapshot is a backup a person may delete once the change looks settled, and the only copy of their agent must not disappear with it. Never move onto an occupied path; report the collision instead.
 2. Apply the approved subset only. If the person approved part of the list, do not apply the rest.
 3. Re-parse every edited file. If a JSON or TOML file no longer parses, restore the snapshot immediately and report the failure.
 4. Confirm the change took effect by re-observing what the runtime exposes. A file that parses is not a change that applied. A lever the runtime ignores leaves a perfectly valid file behind, which is exactly what a silent no-op looks like, so a parse check cannot tell the two apart. Report anything that did not take effect as failed, and do not count its saving.

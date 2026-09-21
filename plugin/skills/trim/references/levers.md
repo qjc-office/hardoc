@@ -10,7 +10,8 @@ Verify every key against the installed runtime version before using it. Keys and
 | `~/.claude.json` | MCP servers at user scope, per-project MCP approvals |
 | `~/.codex/config.toml` | Codex skills, MCP servers, plugins, feature flags |
 | `~/.codex/hooks.json` | Codex hooks |
-| `~/.claude/agents/`, or a project's `.claude/agents/` | Agent definitions written by a person. Touched only under `--include-hooks`, and only by moving a file to `~/.claude/hardoc/disabled-agents/`, never by deleting or editing it. Generated agent files are excluded here as everywhere else: change their source instead |
+| `~/.claude/agents/`, or a project's `.claude/agents/` | Agent definitions written by a person. Touched only under `--include-hooks`, and only by moving a file to this run's holding directory, never by deleting or editing it. Generated agent files are excluded here as everywhere else: change their source instead |
+| `~/.claude/hardoc/disabled-agents/<timestamp>/<scope>/` | Where a disabled agent is held. One directory per run and per scope, so two agents that share a filename never land on the same path |
 
 Project-scoped equivalents (`.claude/settings.json`, `.mcp.json`) follow the same rules when the person asks for a project-level change.
 
@@ -47,7 +48,7 @@ Prefer the CLI when one exists. `plugin disable` and `mcp remove` keep derived s
 | Target | Why it is destructive | Requirement |
 | --- | --- | --- |
 | A single hook | No supported disable flag exists. Hook entries accept only their type, command, timeout and async fields. The entry has to be cut out of the settings file | Snapshot, plus `--include-hooks` |
-| A single agent | No supported disable flag exists in agent frontmatter or settings. The file has to be moved out of the agents directory, to `~/.claude/hardoc/disabled-agents/`, so undo is a move back | Snapshot, plus `--include-hooks` |
+| A single agent | No supported disable flag exists in agent frontmatter or settings. The file has to be moved out of the agents directory, to `~/.claude/hardoc/disabled-agents/<timestamp>/<scope>/`, so undo is a move back. If anything already occupies the destination path, do not move: report the collision and leave both files alone. A move that overwrites is a deletion wearing a different name | Snapshot, plus `--include-hooks` |
 
 Two notes on hooks. Commenting a hook command out is not a supported disable path and must not be proposed. And a global switch that disables every hook usually disables the status line with it, so it is not a substitute for turning off one noisy hook.
 

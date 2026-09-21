@@ -1,0 +1,89 @@
+---
+name: trim
+description: "Reduce the harness exposure a person does not need. Builds a short role profile, ranks skills, plugins, MCP servers, rules, hooks and agents by always-on cost, previews the change set, and applies it only after approval with a one-command rollback. Triggers: trim my harness, too many skills, reduce context, declutter, turn off unused skills or MCP servers, my assistant keeps picking the wrong skill. Not for: read-only diagnosis (use skill-governor audit), installing anything, or editing project source."
+---
+
+# Trim
+
+HarDoc has two surfaces. `skill-governor` collects evidence and stops. `trim` turns that evidence into a change a person approved, and keeps a way back.
+
+The goal is not a smaller item count. It is a harness where the assistant sees what this person actually works on.
+
+## Usage
+
+- Claude Code: `/trim`, `/trim --dry-run`, `/trim restore <snapshot-id>`
+- Codex: `$trim`
+
+| Flag | Effect |
+| --- | --- |
+| `--dry-run` | Preview only. Stop before any write. |
+| `--reprofile` | Ask the profile questions again and overwrite the stored answers. |
+| `--include-hooks` | Allow hook and agent candidates, which require destructive edits. Off by default. |
+| `--level off` | Raise the default prescription from `name-only` to `off` for role-unrelated items. |
+| `restore <id>` | Roll a snapshot back. |
+
+## The core move: lower exposure instead of deleting
+
+Claude Code's `skillOverrides` setting takes four values per skill name. Verify them against the installed version before relying on them.
+
+| Value | Effect | Use for |
+| --- | --- | --- |
+| `on` (absent) | Name and description both exposed | Keep |
+| `name-only` | Name listed, description withheld | **Default prescription.** The skill still works; only its standing token cost drops |
+| `user-invocable-only` | Hidden from the model, `/name` still works | Rarely needed, but should not be auto-selected |
+| `off` | Hidden from both | Confirmed unused |
+
+Start at `name-only`. A wrong guess there costs nothing: the capability survives and a person can still invoke it. Reserve `off` for items the person names, or for `--level off` runs.
+
+The same idea applies elsewhere. Plugins are disabled by writing `false`, not by deleting the key. Rules can be demoted from always-loaded to path-scoped instead of being removed. Prefer the reversible form every time one exists.
+
+## Steps
+
+### 1. Profile
+
+Ask at most four questions, then stop asking. Read `references/profile.md` for the question set and the matching rules. Store answers in `~/.claude/hardoc/profile.json` and reuse them on later runs unless `--reprofile` is given.
+
+A profile is a hypothesis about what this person does, not a fact about what they need. It ranks candidates; it never decides alone.
+
+### 2. Inventory and cost
+
+Reuse the collection contract in the `skill-governor` skill (`references/harness-audit.md` §2). Do not write a second inventory implementation. For every item add three fields:
+
+- `always_cost`: what this item injects into every session regardless of the request. Skill description length, bytes of a rule file with no `paths:` frontmatter, exposed MCP tool schemas, registered hook count.
+- `role_match`: `related`, `unclear`, or `unrelated` against the profile.
+- `recent_use`: whether any observed evidence shows recent use. Absence of evidence is `unknown`, never zero.
+
+Rank candidates by `always_cost` descending within `role_match = unrelated`. An item with a large standing cost and no relation to the person's work is the best candidate. A cheap item is rarely worth touching even when unused.
+
+### 3. Preview
+
+Read [references/levers.md](references/levers.md) before proposing anything. It fixes which files may be edited, which must never be touched, the reversible form for each target, and how standing cost is measured.
+
+Print one table: item, current state, proposed level, estimated saving, evidence, and how to undo it. Put the total saving on top. Name every item that was considered and kept, with the reason.
+
+Write nothing in this step. A person must be able to run the preview on a whim.
+
+### 4. Apply
+
+1. Snapshot first. Copy every file about to change into `~/.claude/hardoc/snapshots/<timestamp>/` and write `manifest.json` recording each item's previous value.
+2. Apply the approved subset only. If the person approved part of the list, do not apply the rest.
+3. Re-parse every edited file. If a JSON or TOML file no longer parses, restore the snapshot immediately and report the failure.
+4. Print the rollback command: `/trim restore <timestamp>`.
+
+`restore` compares the current value against the manifest. When a value changed after the snapshot, report the conflict and leave it alone rather than overwriting somebody's later edit.
+
+## Safety
+
+- **Hooks and agents are opt-in.** Neither has a supported disable flag, so turning one off means cutting an entry out of a settings file or moving a file. They stay out of the applied set unless `--include-hooks` is given, and they always require a snapshot.
+- **Zero observed calls is not a reason to remove anything.** This rule is inherited from `skill-governor` and is not relaxed here. An item may be exposed only on another machine, invoked directly by a project file, or needed rarely.
+- **Dependencies win over counts.** Language servers, security hooks and verification hooks stay even at zero skill invocations.
+- **Recent use is a veto.** Any item with recent-use evidence leaves the candidate list regardless of role match.
+- **Never write derived files.** Plugin state belongs in the settings `enabledPlugins` map; the installed-plugins inventory is generated from it. Marketplace registration belongs to the CLI.
+- **Read the version from the binary that actually runs.** A stale CLI shim elsewhere on PATH may predate the settings keys this skill relies on. Confirm the schema against the running version before proposing a key it may not support.
+- Never install, update, log in, or change a managed policy file to make a change succeed.
+
+## Reporting
+
+Report in this order: what changed, what was kept and why, total estimated saving, snapshot id, rollback command.
+
+State savings as estimates. Standing token cost is measurable; task accuracy is not measured by this skill. When a person asks whether the harness got better, hand them back to `skill-governor evaluate`, which compares real tasks. A smaller context is not by itself an improvement.

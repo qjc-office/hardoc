@@ -1,7 +1,7 @@
 {
   "name": "hardoc",
-  "version": "0.1.0",
-  "description": "HarDoc - Claude Code·Codex 하네스의 중복·충돌·불필요 노출을 읽기 전용으로 진단하고 doctor·작업 정확도 회귀평가를 수행합니다.",
+  "version": "0.2.0",
+  "description": "HarDoc - a read-only checkup for a Claude Code or Codex harness, plus an approval-gated cleanup with one-command rollback.",
   "author": {
     "name": "QuantumJumpClub",
     "url": "https://github.com/qjc-office"
@@ -16,6 +16,8 @@
     "skills",
     "mcp",
     "doctor",
-    "evaluation"
+    "evaluation",
+    "cleanup",
+    "context"
   ]
 }

@@ -4,7 +4,7 @@
 
 > HarDoc! Your harness is dumb right now. Fix it now!
 
-HarDoc hukagua harness ya Claude Code na Codex kwa kusoma pekee. Hupata maagizo yaliyorudiwa au yanayokinzana yanayoweza kumfanya msaidizi achague skill isiyo sahihi.
+HarDoc hukagua harness yako ya Claude Code na Codex. Huripoti kwanza, na hubadilisha mipangilio baada tu ya wewe kuidhinisha.
 
 [English](README.md) · [한국어](README.ko.md) · [All language pages](README.md#read-hardoc-in-your-language)
 
@@ -27,6 +27,7 @@ cd hardoc
 CODEX_SKILLS_DIR="${CODEX_HOME:-$HOME/.codex}/skills"
 mkdir -p "$CODEX_SKILLS_DIR"
 ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
+ln -sfn "$PWD/plugin/skills/trim" "$CODEX_SKILLS_DIR/trim"
 ```
 
 ## Tumia katika Claude Code
@@ -35,6 +36,12 @@ Fungua kikao kipya cha Claude Code kisha utekeleze:
 
 ```text
 /skill-governor audit .
+```
+
+Ili kutekeleza yaliyo kwenye ripoti, tazama muhtasari wa usafishaji kwanza:
+
+```text
+/trim --dry-run
 ```
 
 ## Tumia na Codex
@@ -55,6 +62,6 @@ HarDoc hukagua saraka ya mradi kwanza, kisha toleo la CLI, na hujaribu native do
 
 ## Mipaka ya usalama
 
-HarDoc ni ya kusoma pekee. Haifuti, hailemazi, haisakinishi wala kubadilisha usanidi wa harness, na haisahihishi matokeo ya doctor kiotomatiki. Kagua mapendekezo kabla ya mabadiliko.
+HarDoc haibadilishi chochote bila idhini yako. Ujuzi wa `skill-governor` ni wa kusoma tu. `trim` hutekeleza mabadiliko baada tu ya wewe kuidhinisha muhtasari, huchukua nakala kwanza, na huonyesha amri moja ya kurudisha kila kitu.
 
 Tazama [English README](README.md) kwa mwongozo na tathmini kamili.

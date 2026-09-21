@@ -4,7 +4,7 @@
 
 > HarDoc! Your harness is dumb right now. Fix it now!
 
-HarDoc prüft das Harness von Claude Code und Codex nur lesend. Es findet doppelte oder widersprüchliche Anweisungen, durch die der Assistent den falschen Skill auswählt.
+HarDoc prüft deine Claude-Code- und Codex-Harness. Es berichtet zuerst und ändert Einstellungen erst, nachdem du zugestimmt hast.
 
 [English](README.md) · [한국어](README.ko.md) · [All language pages](README.md#read-hardoc-in-your-language)
 
@@ -27,6 +27,7 @@ cd hardoc
 CODEX_SKILLS_DIR="${CODEX_HOME:-$HOME/.codex}/skills"
 mkdir -p "$CODEX_SKILLS_DIR"
 ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
+ln -sfn "$PWD/plugin/skills/trim" "$CODEX_SKILLS_DIR/trim"
 ```
 
 ## In Claude Code verwenden
@@ -35,6 +36,12 @@ ln -sfn "$PWD/plugin/skills/skill-governor" "$CODEX_SKILLS_DIR/skill-governor"
 
 ```text
 /skill-governor audit .
+```
+
+Um auf den Bericht zu reagieren, sieh dir eine Vorschau der Bereinigung an:
+
+```text
+/trim --dry-run
 ```
 
 ## Mit Codex verwenden
@@ -55,6 +62,6 @@ HarDoc prüft zuerst das Projektverzeichnis, dann die CLI-Version und versucht d
 
 ## Sicherheitsgrenzen
 
-HarDoc arbeitet nur lesend. Es löscht, deaktiviert, installiert oder ändert keine Harness-Konfiguration und repariert Doctor-Ergebnisse nicht automatisch. Prüfen Sie Vorschläge vor jeder Änderung.
+HarDoc ändert nichts ohne deine Zustimmung. `skill-governor` ist schreibgeschützt. `trim` wendet eine Änderung erst an, nachdem du eine Vorschau bestätigt hast, legt vorher einen Snapshot an und gibt einen einzelnen Befehl zum Zurücksetzen aus.
 
 Die vollständige Anleitung und Bewertung finden Sie im [English README](README.md).
